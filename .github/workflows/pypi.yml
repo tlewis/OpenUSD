@@ -59,8 +59,7 @@ jobs:
           docker run --name usdmanylinux --rm -id -v ./:/opt/USD -v /home/vsts/dist:/opt/USD-dist manylinuxwithcmake
       - name: Install Dependencies
         run: |
-          docker exec usdmanylinux ${{ matrix.PYTHON.INTERPRETER }} -m pip install setuptools
-          docker exec usdmanylinux ${{ matrix.PYTHON.INTERPRETER }} -m pip install wheel
+          docker exec usdmanylinux ${{ matrix.PYTHON.INTERPRETER }} -m pip install setuptools wheel build
       - name: Building USD
         run: |
           # Terrible, terrible hack. The manylinux Docker image used to build the
@@ -85,9 +84,11 @@ jobs:
           docker exec usdmanylinux cp -R /opt/USD/inst ./packaging
           docker exec usdmanylinux sh -c 'cp build_scripts/pypi/package_files/* ./packaging'
           docker exec usdmanylinux sh -c 'cp LICENSE.txt ./packaging'
-      - name: Running setup.py
+      - name: Building wheel
         run: |
-          docker exec -w /opt/USD/packaging usdmanylinux ${{ matrix.PYTHON.INTERPRETER }} setup.py ${{ env.POST_RELEASE_TAG }} bdist_wheel --python-tag ${{ matrix.PYTHON.TAG }}
+          docker exec -w /opt/USD/packaging usdmanylinux ${{ matrix.PYTHON.INTERPRETER }} -m build --wheel \
+            -C="--build-option=--python-tag" \
+            -C="--build-option=${{ matrix.PYTHON.TAG }}"
       - name: Running auditwheel repair (moves .so files into package)
         run: |
           docker exec usdmanylinux /bin/bash -c 'PYTHONPATH=/opt/USD/packaging/pypi/lib/python LD_LIBRARY_PATH=/opt/USD/packaging/pypi/lib:$LD_LIBRARY_PATH auditwheel repair packaging/dist/*.whl'
@@ -138,8 +139,7 @@ jobs:
       - name: Install dependencies
         run: |
           ${{ matrix.PYTHON.INTERPRETER }} -m pip install --upgrade pip
-          ${{ matrix.PYTHON.INTERPRETER }} -m pip install setuptools
-          ${{ matrix.PYTHON.INTERPRETER }} -m pip install delocate~=0.10.2 wheel
+          ${{ matrix.PYTHON.INTERPRETER }} -m pip install setuptools delocate~=0.10.2 wheel build
       - name: Build USD
         run: |
           sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
@@ -155,10 +155,14 @@ jobs:
           cp LICENSE.txt ./packaging
           ls -la ./packaging
           ls -la ./packaging/inst
-      - name: Running setup.py
+      - name: Building wheel
         run: |
           cd ./packaging
-          ${{ matrix.PYTHON.INTERPRETER }} setup.py ${{ env.POST_RELEASE_TAG }} bdist_wheel --python-tag ${{ matrix.PYTHON.TAG }} --plat-name macosx_10_9_universal2
+          ${{ matrix.PYTHON.INTERPRETER }} -m build --wheel \
+            -C="--build-option=--python-tag" \
+            -C="--build-option=${{ matrix.PYTHON.TAG }}" \
+            -C="--build-option=--plat-name" \
+            -C="--build-option=macosx_10_9_universal2"
       - name: Running delocate
         run: |
           # set DYLD_FALLBACK_LIBRARY_PATH for delocate-wheel to resolve libs 
@@ -209,8 +213,7 @@ jobs:
           check-latest: false
       - name: Install dependencies  
         run: |
-          python -m pip install setuptools
-          python -m pip install wheel
+          python -m pip install setuptools wheel build
         shell: cmd
       - name: Build USD
         run: |
@@ -229,11 +232,15 @@ jobs:
           dir D:\packaging
           dir D:\packaging\inst
         shell: cmd
-      - name: Running setup.py
+      - name: Building wheel
         run: |
           D:
           cd D:\packaging
-          python setup.py ${{ env.POST_RELEASE_TAG }} bdist_wheel --python-tag ${{ matrix.PYTHON.TAG }} --plat-name win_amd64
+          python -m build --wheel \
+            -C="--build-option=--python-tag" \
+            -C="--build-option=${{ matrix.PYTHON.TAG }}" \
+            -C="--build-option=--plat-name" \
+            -C="--build-option=win_amd64"
           dir
         shell: cmd
       - name: Upload artifacts

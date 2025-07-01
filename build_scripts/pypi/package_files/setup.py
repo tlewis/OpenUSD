@@ -5,13 +5,11 @@
 # https://openusd.org/license.
 #
 import setuptools
-import argparse
 import glob
 import os
 import platform
 import re
 import shutil
-import sys
 
 # This setup.py script expects to be run from an inst directory in a typical
 # USD build run from build_usd.py.
@@ -23,35 +21,32 @@ import sys
 # is done depends on platform, and is mostly accomplished by steps in the CI
 # system.
 
-# Define special arguments for setup.py to customize behavior.
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--post-release-tag", type=str,
-    help="Post release tag to append to version number")
-
-args, remaining = parser.parse_known_args()
-
-# Remove our special arguments from sys.argv so that setuptools doesn't choke on
-# them. argparse will also eat the "setup.py" argument in sys.argv[0] which is
-# apparently necessary for setuptools, so we manually prepend that to the
-# remaining unprocessed arguments.
-sys.argv = [sys.argv[0]] + remaining
 
 def windows():
     return platform.system() == "Windows"
+
 
 WORKING_ROOT = '.'
 USD_BUILD_OUTPUT = os.path.join(WORKING_ROOT, 'inst')
 BUILD_DIR = os.path.join(WORKING_ROOT, 'pypi')
 
 # Copy everything in lib over before we start making changes
-shutil.copytree(os.path.join(USD_BUILD_OUTPUT, 'lib'), os.path.join(BUILD_DIR, 'lib'))
+shutil.copytree(
+    os.path.join(USD_BUILD_OUTPUT, 'lib'),
+    os.path.join(BUILD_DIR, 'lib'),
+    dirs_exist_ok=True,
+)
 
 # Move the pluginfos into a directory contained inside pxr, for easier
 # distribution. This breaks the relative paths in the pluginfos, but we'll need
 # to update them later anyway after running "auditwheel repair", which will
 # move the libraries to a new directory
-shutil.move(os.path.join(BUILD_DIR, 'lib/usd'), os.path.join(BUILD_DIR, 'lib/python/pxr/pluginfo'))
+shutil.copytree(
+    os.path.join(BUILD_DIR, 'lib/usd'),
+    os.path.join(BUILD_DIR, 'lib/python/pxr/pluginfo'),
+    dirs_exist_ok=True
+)
+shutil.rmtree(os.path.join(BUILD_DIR, 'lib/usd'))
 
 if windows():
     # On windows we also need dlls from the bin directory
@@ -105,9 +100,9 @@ with open(os.path.join(USD_BUILD_OUTPUT, "include/pxr/pxr.h"), "r") as fh:
             continue
 
 version = "{}.{}".format(minorVersion, patchVersion)
-
-if args.post_release_tag:
-    version = "{}.{}".format(version, args.post_release_tag)
+post_release_tag = os.getenv("POST_RELEASE_TAG", "").strip()
+if post_release_tag:
+    version = "{}.{}".format(version, post_release_tag)
 
 # Config
 setuptools.setup(
