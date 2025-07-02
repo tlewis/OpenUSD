@@ -86,7 +86,8 @@ jobs:
           docker exec usdmanylinux sh -c 'cp LICENSE.txt ./packaging'
       - name: Building wheel
         run: |
-          docker exec -w /opt/USD/packaging usdmanylinux ${{ matrix.PYTHON.INTERPRETER }} -m build --wheel \
+          docker exec -w /opt/USD/packaging -e POST_RELEASE_TAG=${{ env.POST_RELEASE_TAG }} usdmanylinux \
+            ${{ matrix.PYTHON.INTERPRETER }} -m build --wheel \
             -C="--build-option=--python-tag" \
             -C="--build-option=${{ matrix.PYTHON.TAG }}"
       - name: Running auditwheel repair (moves .so files into package)
