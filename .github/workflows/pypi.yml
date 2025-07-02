@@ -18,7 +18,7 @@ on:
         default: ''
 
 env:
-  POST_RELEASE_TAG: ${{ github.event.inputs.post_release_tag == '' && ' ' || format('--post-release-tag {0}', github.event.inputs.post_release_tag) }}
+  POST_RELEASE_TAG: ${{ github.event.inputs.post_release_tag == '' && ' ' || github.event.inputs.post_release_tag }}
 
 jobs:
   Linux:
