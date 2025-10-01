@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     outputs:
-      validation-failed: ${{ steps.changed-workflows.outputs.any_changed }}
+      validation-failed: ${{ steps.changed-workflows.outputs.any_changed && false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
