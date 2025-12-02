@@ -50,7 +50,11 @@ shutil.rmtree(os.path.join(BUILD_DIR, 'lib/usd'))
 
 if windows():
     # On windows we also need dlls from the bin directory
-    shutil.copytree(os.path.join(USD_BUILD_OUTPUT, 'bin'), os.path.join(BUILD_DIR, 'bin'))
+    shutil.copytree(
+        os.path.join(USD_BUILD_OUTPUT, 'bin'),
+        os.path.join(BUILD_DIR, 'bin'),
+        dirs_exist_ok=True
+    )
 
     # On Linux and Mac there are tools that do this for us (auditwheel and
     # delocate) On Windows we'll move these here in setup. This is simpler
