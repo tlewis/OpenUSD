@@ -237,10 +237,10 @@ jobs:
         run: |
           D:
           cd D:\packaging
-          python -m build --wheel \
-            -C="--build-option=--python-tag" \
-            -C="--build-option=${{ matrix.PYTHON.TAG }}" \
-            -C="--build-option=--plat-name" \
+          python -m build --wheel ^
+            -C="--build-option=--python-tag" ^
+            -C="--build-option=${{ matrix.PYTHON.TAG }}" ^
+            -C="--build-option=--plat-name" ^
             -C="--build-option=win_amd64"
           dir
         shell: cmd
