@@ -57,12 +57,13 @@ if windows():
     )
 
     # On Linux and Mac there are tools that do this for us (auditwheel and
-    # delocate) On Windows we'll move these here in setup. This is simpler
+    # delocate). On Windows we'll move these here in setup. This is simpler
     # because there are no RPATHs to worry about.
     dll_files = glob.glob(os.path.join(BUILD_DIR, "lib/*.dll"))
     dll_files.extend(glob.glob(os.path.join(BUILD_DIR, "bin/*.dll")))
     for f in dll_files:
-        shutil.move(f, os.path.join(BUILD_DIR, "lib/python/pxr"))
+        shutil.copy2(f, os.path.join(BUILD_DIR, "lib/python/pxr"))
+        os.remove(f)
 
     # Because there are no RPATHS, patch __init__.py
     # See this thread and related conversations
