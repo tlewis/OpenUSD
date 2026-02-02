@@ -111,26 +111,32 @@ jobs:
             INTERPRETER: python3.8
             TAG: cp38
             XCODE: '26.0'
+            DELOCATE: '0.10.7'
           - VERSION_SPEC: '3.9'
             INTERPRETER: python3.9
             TAG: cp39
             XCODE: '16.0'
+            DELOCATE: '0.13.0'
           - VERSION_SPEC: '3.10'
             INTERPRETER: python3.10
             TAG: cp310
             XCODE: '16.0'
+            DELOCATE: '0.13.0'
           - VERSION_SPEC: '3.11'
             INTERPRETER: python3.11
             TAG: cp311
             XCODE: '16.0'
+            DELOCATE: '0.13.0'
           - VERSION_SPEC: '3.12'
             INTERPRETER: python3.12
             TAG: cp312
             XCODE: '16.0'
+            DELOCATE: '0.13.0'
           - VERSION_SPEC: '3.13.5'
             INTERPRETER: python3.13
             TAG: cp313
             XCODE: '16.0'
+            DELOCATE: '0.13.0'
     runs-on: macos-15
     timeout-minutes: 120
     steps:
@@ -145,7 +151,7 @@ jobs:
         run: |
           ${{ matrix.PYTHON.INTERPRETER }} -m pip install --upgrade pip
           ${{ matrix.PYTHON.INTERPRETER }} -m pip install setuptools
-          ${{ matrix.PYTHON.INTERPRETER }} -m pip install delocate==0.10.7 wheel
+          ${{ matrix.PYTHON.INTERPRETER }} -m pip install delocate==${{ matrix.PYTHON.DELOCATE }} wheel
       - name: Build USD
         run: |
           sudo xcode-select -s /Applications/Xcode_${{ matrix.PYTHON.XCODE }}.app/Contents/Developer
