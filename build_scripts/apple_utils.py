@@ -18,7 +18,6 @@ import re
 import platform
 import shlex
 import subprocess
-import glob
 from typing import Optional, List, Dict
 
 TARGET_NATIVE = "native"
