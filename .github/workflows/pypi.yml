@@ -106,6 +106,7 @@ jobs:
           path: /home/vsts/dist
   macOS:
     strategy:
+      fail-fast: false
       matrix:
         PYTHON:
           - VERSION_SPEC: '3.8'
@@ -140,6 +141,8 @@ jobs:
             DELOCATE: '0.13.0'
     runs-on: macos-15
     timeout-minutes: 120
+    env:
+      MACOSX_DEPLOYMENT_TARGET: 10.9
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
