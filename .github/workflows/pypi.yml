@@ -142,7 +142,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 120
     env:
-      MACOSX_DEPLOYMENT_TARGET: 10.13
+      MACOSX_DEPLOYMENT_TARGET: 10.15
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -174,7 +174,7 @@ jobs:
       - name: Running setup.py
         run: |
           cd ./packaging
-          ${{ matrix.PYTHON.INTERPRETER }} setup.py ${{ env.POST_RELEASE_TAG }} bdist_wheel --python-tag ${{ matrix.PYTHON.TAG }} --plat-name macosx_10_13_universal2
+          ${{ matrix.PYTHON.INTERPRETER }} setup.py ${{ env.POST_RELEASE_TAG }} bdist_wheel --python-tag ${{ matrix.PYTHON.TAG }} --plat-name macosx_10_15_universal2
       - name: Running delocate
         run: |
           # set DYLD_FALLBACK_LIBRARY_PATH for delocate-wheel to resolve libs 
