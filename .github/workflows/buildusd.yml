@@ -197,6 +197,7 @@ jobs:
     strategy:
       matrix:
         target: [Wasm, Wasm64]
+      fail-fast: false
     runs-on: ubuntu-22.04
     if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
     steps:
