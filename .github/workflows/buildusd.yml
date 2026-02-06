@@ -193,12 +193,12 @@ jobs:
           ctest --output-on-failure -j4 -C Release --exclude-regex "TfPathUtils|testExecGeomXformable_Perf_Large"
         shell: cmd
 
-  Wasm64:
-    # needs:
-    #   - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+  Wasm:
+    strategy:
+      matrix:
+        target: [Wasm, Wasm64]
     runs-on: ubuntu-22.04
-    timeout-minutes: 120
+    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -216,11 +216,12 @@ jobs:
         with:
           path: |
             USDinst
-          key: ${{ runner.os }}-BuildUSD-Wasm64-${{ hashFiles('build_scripts/**/*') }}
+            USDgen/build
+          key: ${{ runner.os }}-BuildUSD-${{ matrix.target }}-${{ hashFiles('build_scripts/**/*') }}
       - name: Build USD
         run: |
           source ${{ github.workspace }}/emsdk/emsdk_env.sh
-          python3 build_scripts/build_usd.py -v --build-target wasm64 USDinst \
+          python3 build_scripts/build_usd.py -v --build-target ${{ matrix.target }} USDinst \
             --build USDgen/build --src USDgen/src \
             --build-args USD,"-DPXR_HEADLESS_TEST_MODE=ON -DPXR_BUILD_TESTS=ON"
       - name: Save build artifacts to cache
@@ -229,11 +230,12 @@ jobs:
         with:
           path: |
             USDinst
+            USDgen/build
           key: ${{ steps.cache-usd-build-dependency.outputs.cache-primary-key }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: usd-wasm64
+          name: usd-${{ matrix.target }}
           path: USDinst
       - name: Test USD
         working-directory: ./USDgen/build/OpenUSD
