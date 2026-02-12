@@ -10,29 +10,28 @@ on:
       - dev
     paths:
       - '**'
-      - '!.github/workflows/**'
 
 jobs:
-  Validation:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 30
-    outputs:
-      validation-failed: ${{ steps.changed-workflows.outputs.any_changed }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
-      - name: Check workflows directory
-        id: changed-workflows
-        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c #v46
-        with:
-          files: |
-            .github/workflows/**
+#   Validation:
+#     runs-on: ubuntu-22.04
+#     timeout-minutes: 30
+#     outputs:
+#       validation-failed: ${{ steps.changed-workflows.outputs.any_changed }}
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#         with:
+#           ref: ${{ github.ref }}
+#       - name: Check workflows directory
+#         id: changed-workflows
+#         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c #v46
+#         with:
+#           files: |
+#             .github/workflows/**
 
   Linux:
-    needs:
-      - Validation
+    # needs:
+    #   - Validation
     if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
     runs-on: ubuntu-22.04
     env:
@@ -83,8 +82,8 @@ jobs:
           ctest --output-on-failure -j4 -C Release --exclude-regex "testExecGeomXformable_Perf_Large"
 
   macOS:
-    needs:
-      - Validation
+    # needs:
+    #   - Validation
     if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
     runs-on: macos-15
     env:
@@ -140,8 +139,8 @@ jobs:
           ctest --output-on-failure -j4 -C Release --exclude-regex "testExecGeomXformable_Perf_Large"
 
   Windows:
-    needs:
-      - Validation
+    # needs:
+    #   - Validation
     if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
     runs-on: windows-2022
     env:
@@ -195,8 +194,8 @@ jobs:
         shell: cmd
 
   Wasm:
-    needs:
-      - Validation
+    # needs:
+    #   - Validation
     if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
     strategy:
       matrix:
