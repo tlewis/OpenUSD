@@ -40,10 +40,22 @@ SDF_INSTANTIATE_POOL(Sdf_PathPropTag, Sdf_SizeofPropPathNode, /*regionBits=*/8);
 // changes.
 #ifdef ARCH_BITS_32
 static_assert(sizeof(Sdf_PrimPathNode) == 16, "");
+static_assert(sizeof(Sdf_PrimVariantSelectionNode) == 16, "");
 static_assert(sizeof(Sdf_PrimPropertyPathNode) == 16, "");
+static_assert(sizeof(Sdf_TargetPathNode) == 20, "");
+static_assert(sizeof(Sdf_RelationalAttributePathNode) == 16, "");
+static_assert(sizeof(Sdf_MapperPathNode) == 20, "");
+static_assert(sizeof(Sdf_MapperArgPathNode) == 16, "");
+static_assert(sizeof(Sdf_ExpressionPathNode) == 12, "");
 #else
 static_assert(sizeof(Sdf_PrimPathNode) == 24, "");
+static_assert(sizeof(Sdf_PrimVariantSelectionNode) == 24, "");
 static_assert(sizeof(Sdf_PrimPropertyPathNode) == 24, "");
+static_assert(sizeof(Sdf_TargetPathNode) == 24, "");
+static_assert(sizeof(Sdf_RelationalAttributePathNode) == 24, "");
+static_assert(sizeof(Sdf_MapperPathNode) == 24, "");
+static_assert(sizeof(Sdf_MapperArgPathNode) == 24, "");
+static_assert(sizeof(Sdf_ExpressionPathNode) == 16, "");
 #endif
 
 struct Sdf_PathNodePrivateAccess
