@@ -45,11 +45,13 @@ void TfDelegatedCountDecrement(Sdf_PathNode const *) noexcept;
 struct Sdf_PathPrimTag;
 struct Sdf_PathPropTag;
 
-// These are validated below.
 
+// Note: The sizes below represent the largest size of objects which are
+// created from the PrimPath and PropPath pools respectively.
+// These are validated below.
 #ifdef ARCH_BITS_32
 static constexpr size_t Sdf_SizeofPrimPathNode = 16;
-static constexpr size_t Sdf_SizeofPropPathNode = 16;
+static constexpr size_t Sdf_SizeofPropPathNode = 20;
 #else
 static constexpr size_t Sdf_SizeofPrimPathNode = 24;
 static constexpr size_t Sdf_SizeofPropPathNode = 24;
@@ -1431,8 +1433,14 @@ PXR_NAMESPACE_CLOSE_SCOPE
 
 PXR_NAMESPACE_OPEN_SCOPE
 
-static_assert(Sdf_SizeofPrimPathNode == sizeof(Sdf_PrimPathNode), "");
-static_assert(Sdf_SizeofPropPathNode == sizeof(Sdf_PrimPropertyPathNode), "");
+static_assert(Sdf_SizeofPrimPathNode >= sizeof(Sdf_PrimPathNode), "");
+static_assert(Sdf_SizeofPrimPathNode >= sizeof(Sdf_PrimVariantSelectionNode), "");
+static_assert(Sdf_SizeofPropPathNode >= sizeof(Sdf_PrimPropertyPathNode), "");
+static_assert(Sdf_SizeofPropPathNode >= sizeof(Sdf_TargetPathNode), "");
+static_assert(Sdf_SizeofPropPathNode >= sizeof(Sdf_RelationalAttributePathNode), "");
+static_assert(Sdf_SizeofPropPathNode >= sizeof(Sdf_MapperPathNode), "");
+static_assert(Sdf_SizeofPropPathNode >= sizeof(Sdf_MapperArgPathNode), "");
+static_assert(Sdf_SizeofPropPathNode >= sizeof(Sdf_ExpressionPathNode), "");
 
 PXR_NAMESPACE_CLOSE_SCOPE
 
