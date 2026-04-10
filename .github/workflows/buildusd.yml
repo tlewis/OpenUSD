@@ -228,9 +228,7 @@ jobs:
           ctest --output-on-failure -j4 -C Release --exclude-regex "testExecGeomXformable_Perf_Large"
 
   Windows:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     runs-on: windows-2022
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
