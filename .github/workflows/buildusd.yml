@@ -258,8 +258,8 @@ jobs:
           python -m pip install PyOpenGL PySide2
       - name: Build USD
         run: |
-          # Not using '--tests' to avoid building extra dependencies that are unneeded for headless tests
-          python build_scripts/build_usd.py --no-materialx --generator "Visual Studio 17 2022" --build USDgen/build --src USDgen/src USDinst --build-args USD,"-DPXR_HEADLESS_TEST_MODE=ON -DPXR_BUILD_TESTS=ON" -v
+          :: Not using '--tests' to avoid building extra dependencies that are unneeded for headless tests
+          python build_scripts/build_usd.py --no-materialx --generator "Visual Studio 17 2022" --build USDgen/build --src USDgen/src USDinst --build-args USD,"-DPXR_HEADLESS_TEST_MODE=ON -DPXR_BUILD_TESTS=ON" -vv
         shell: cmd
       - name: Save build artifacts to cache
         if: steps.cache-usd-build-dependency.outputs.cache-hit != 'true'
@@ -278,7 +278,7 @@ jobs:
         run: |
           call set PATH=${{ github.workspace }}\USDinst\bin;${{ github.workspace }}\USDinst\lib;${{ github.workspace }}\USDinst\share\usd\examples\plugin;${{ github.workspace }}\USDinst\plugin\usd;%PATH%
           call set PYTHONPATH=${{ github.workspace }}\USDinst\lib\python;%PYTHONPATH%
-          # Internal ticket USD-8035
+          :: Internal ticket USD-8035
           ctest --output-on-failure -j4 -C Release --exclude-regex "TfPathUtils|testExecGeomXformable_Perf_Large"
         shell: cmd
 
