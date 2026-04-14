@@ -238,6 +238,7 @@ jobs:
       PYTHONUNBUFFERED: "1"
       TEMP: D:\temp
       TMP: D:\temp
+      PATH: "${{ env.USERPROFILE }}\.cargo\bin;${{ env.PATH }}"
     timeout-minutes: 180
     steps:
       - name: Checkout code
