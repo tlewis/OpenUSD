@@ -259,7 +259,7 @@ jobs:
       - name: Build USD
         run: |
           :: Not using '--tests' to avoid building extra dependencies that are unneeded for headless tests
-          python build_scripts/build_usd.py --no-materialx --generator "Visual Studio 17 2022" --build USDgen/build --src USDgen/src USDinst --build-args USD,"-DPXR_ENABLE_PRECOMPILED_HEADERS=OFF -DPXR_HEADLESS_TEST_MODE=ON -DPXR_BUILD_TESTS=ON -DPXR_ENABLE_COMPILER_CACHE=ON -DPXR_COMPILER_CACHE_NAME=sccache" -vv
+          python build_scripts/build_usd.py --no-materialx --generator "Visual Studio 17 2022" --compiler-cache --build USDgen/build --src USDgen/src USDinst --build-args USD,"-DPXR_ENABLE_PRECOMPILED_HEADERS=OFF -DPXR_HEADLESS_TEST_MODE=ON -DPXR_BUILD_TESTS=ON -DPXR_ENABLE_COMPILER_CACHE=ON -DPXR_COMPILER_CACHE_NAME=sccache" -vv
         shell: cmd
       - name: Upload artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 #v4.6.2
