@@ -234,6 +234,7 @@ jobs:
       contents: write # Grant write permissions in order to upload artifacts
     env:
       PYTHON_VERSION: "3.9"
+      PYTHONIOENCODING: "utf-8"
     timeout-minutes: 180
     steps:
       - name: Checkout code
