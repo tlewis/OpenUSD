@@ -236,8 +236,6 @@ jobs:
       PYTHON_VERSION: "3.9"
       PYTHONIOENCODING: "utf-8"
       PYTHONUNBUFFERED: "1"
-      TEMP: D:\temp
-      TMP: D:\temp
     timeout-minutes: 180
     steps:
       - name: Checkout code
