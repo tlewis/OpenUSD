@@ -125,7 +125,12 @@ _add_define("WIN32_LEAN_AND_MEAN")
 set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /bigobj")
 
 # Enable PDB generation.
-set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /Zi")
+if(PXR_COMPILER_CACHE_NAME STREQUAL "sccache")
+    # When using sccache, we want to disable PDB generation to avoid "permission denied" compile errors on program databases
+    set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /Z7")
+else()
+    set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /Zi")
+endif()
 
 # Enable multiprocessor builds.
 set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /MP")
