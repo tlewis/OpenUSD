@@ -268,8 +268,16 @@ endif()
 
 # Configure the use of compiler caches for faster compilation
 option(PXR_ENABLE_COMPILER_CACHE "Enable the use of a compiler cache" OFF)
-set(PXR_COMPILER_CACHE_NAME "ccache"
-        CACHE
-        STRING
-        "The name of the compiler cache program to use"
+
+# Use sccache as the default on Windows, ccache on other platforms
+if(MSVC)
+    set(pxr_default_cache "sccache")
+else()
+    set(pxr_default_cache "ccache")
+endif()
+
+set(PXR_COMPILER_CACHE_NAME "${pxr_default_cache}"
+    CACHE
+    STRING
+    "The name of the compiler cache program to use"
 )
