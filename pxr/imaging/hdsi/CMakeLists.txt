@@ -10,7 +10,6 @@ pxr_library(hdsi
         work
         sdf
         cameraUtil
-        usdImaging
         usdShade
         usdVol
         geomUtil
