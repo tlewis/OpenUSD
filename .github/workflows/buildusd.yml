@@ -229,7 +229,7 @@ jobs:
 
   Windows:
     if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
-    runs-on: windows-2025
+    runs-on: windows-2022
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
     env:
