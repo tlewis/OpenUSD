@@ -166,10 +166,6 @@ pxr_library(usdImaging
 
     RESOURCE_FILES
         plugInfo.json
-
-    INCLUDE_DIRS
-        PRIVATE
-            "${CMAKE_SOURCE_DIR}"
 )
 
 # Build tests
