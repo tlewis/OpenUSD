@@ -247,7 +247,7 @@ jobs:
         with:
           key: ${{ runner.os }}-ccache  # Distinguish cache by OS
           variant: sccache              # Use 'sccache' for better Windows/MSVC support
-          max-size: 1200MB
+          max-size: 3GB
       - name: Add sccache to PATH
         run: echo "C:\%USERPROFILE%\.cargo\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
       - name: Install Python
