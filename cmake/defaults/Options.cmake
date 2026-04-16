@@ -269,7 +269,6 @@ endif()
 # Configure the use of compiler caches for faster compilation
 option(PXR_ENABLE_COMPILER_CACHE "Enable the use of a compiler cache" OFF)
 
-# Use sccache as the default on Windows, ccache on other platforms
 if(MSVC)
     set(pxr_default_cache "sccache")
 else()
