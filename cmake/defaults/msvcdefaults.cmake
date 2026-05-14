@@ -125,13 +125,7 @@ _add_define("WIN32_LEAN_AND_MEAN")
 set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /bigobj")
 
 # Enable PDB generation.
-cmake_policy(SET CMP0141 NEW)
-if(PXR_ENABLE_COMPILER_CACHE AND PXR_COMPILER_CACHE_NAME STREQUAL "sccache")
-    # When using sccache, we want to disable PDB generation to avoid "permission denied" compile errors
-    set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:Embedded>")
-else()
-    set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>")
-endif()
+set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /Zi")
 
 # Enable multiprocessor builds.
 set(_PXR_CXX_FLAGS "${_PXR_CXX_FLAGS} /MP")
