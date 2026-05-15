@@ -1,6 +1,5 @@
 name: BuildUSD
 
-
 permissions:
   contents: read
 
