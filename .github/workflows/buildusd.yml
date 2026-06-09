@@ -236,6 +236,8 @@ jobs:
       PYTHON_VERSION: "3.9"
       PYTHONIOENCODING: "utf-8"
       PYTHONUNBUFFERED: "1"
+      # ccache depend_mode helps avoid false cache hits
+      CCACHE_DEPEND: "1"
     timeout-minutes: 180
     steps:
       - name: Checkout code
@@ -247,10 +249,6 @@ jobs:
         with:
           key: ${{ runner.os }}-ccache  # Distinguish cache by OS
           max-size: 3GB
-      - name: Configure ccache
-        run: |
-          # depend helps to mode avoids false cache hits on MSVC
-          ccache --set-config "depend_mode=true"
       - name: Use D drive for temp dirs
         shell: pwsh
         run: |
