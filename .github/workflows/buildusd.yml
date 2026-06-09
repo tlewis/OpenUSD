@@ -249,7 +249,7 @@ jobs:
           max-size: 3GB
       - name: Configure ccache
         run: |
-          :: depend helps to mode avoids false cache hits on MSVC
+          # depend helps to mode avoids false cache hits on MSVC
           ccache --set-config "depend_mode=true"
       - name: Use D drive for temp dirs
         shell: pwsh
