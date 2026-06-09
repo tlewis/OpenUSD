@@ -13,7 +13,6 @@ on:
       - dev
     paths:
       - '**'
-      - '!.github/workflows/**'
   workflow_dispatch:
 
 jobs:
@@ -230,8 +229,8 @@ jobs:
           ctest --output-on-failure -j4 -C Release --exclude-regex "testExecGeomXformable_Perf_Large"
 
   Windows:
-    needs:
-      - Validation
+    # needs:
+    #   - Validation
     if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
     runs-on: windows-2022
     permissions:
