@@ -250,6 +250,10 @@ jobs:
         with:
           key: ${{ runner.os }}-ccache  # Distinguish cache by OS
           max-size: 3GB
+      - name: Configure ccache
+        run: |
+          :: depend helps to mode avoids false cache hits on MSVC
+          ccache --set-config "depend_mode=true"
       - name: Use D drive for temp dirs
         shell: pwsh
         run: |
