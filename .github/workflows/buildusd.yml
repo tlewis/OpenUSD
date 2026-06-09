@@ -8,6 +8,7 @@ on:
     branches:
       - dev
       - release
+      - 'tlewis/**'
   pull_request:
   workflow_dispatch:
 
