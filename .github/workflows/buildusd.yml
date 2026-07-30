@@ -13,7 +13,6 @@ on:
       - dev
     paths:
       - '**'
-      - '!.github/workflows/**'
 
 jobs:
   Validation:
@@ -322,9 +321,7 @@ jobs:
         shell: cmd
 
   Wasm:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     strategy:
       matrix:
         target: [Wasm, Wasm64]
@@ -371,8 +368,8 @@ jobs:
       - name: Test USD
         working-directory: ./USDgen/build/OpenUSD
         run: |
-          ctest --output-on-failure -j4 -C Release -LE flaky --no-tests=error
+          ctest -V -j4 -C Release -LE flaky --no-tests=error
       - name: Test USD (flaky)
         working-directory: ./USDgen/build/OpenUSD
         run: |
-          ctest --output-on-failure -j4 -C Release -L flaky --repeat until-pass:3
+          ctest -V -j4 -C Release -L flaky --repeat until-pass:3
