@@ -11,9 +11,7 @@ on:
   pull_request:
     branches:
       - dev
-    paths:
-      - '**'
-      - '!.github/workflows/**'
+
 
 jobs:
   Validation:
@@ -322,9 +320,7 @@ jobs:
         shell: cmd
 
   Wasm:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     strategy:
       matrix:
         target: [Wasm, Wasm64]
