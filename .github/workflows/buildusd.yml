@@ -46,7 +46,7 @@ jobs:
           sudo apt-get -qq update
           sudo apt-get install -y python3-setuptools libglew-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev
           pip install --upgrade pip
-          pip install PySide2 PyOpenGL
+          pip install PySide6 PyOpenGL
       - name: Build USD
         run: |
           # All tests are run for a push to fully validate the repository; tests requiring a GPU are executed in the
@@ -119,7 +119,7 @@ jobs:
           sudo dpkg -i virtualgl_3.1_amd64.deb
 
           pip install --upgrade pip
-          pip install PySide2 PyOpenGL cmake
+          pip install PySide6 PyOpenGL cmake
       - name: Download USD Build
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 #v4.3.0
         with:
@@ -267,7 +267,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install PyOpenGL PySide2
+          python -m pip install PyOpenGL PySide6
       - name: Build USD
         run: |
           :: Not using '--tests' to avoid building extra dependencies that are unneeded for headless tests
