@@ -16,27 +16,8 @@ on:
       - '!.github/workflows/**'
 
 jobs:
-  Validation:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 10
-    outputs:
-      validation-failed: ${{ steps.changed-workflows.outputs.any_changed }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
-        with:
-          ref: ${{ github.ref }}
-      - name: Check workflows directory
-        id: changed-workflows
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 #v47.0.6
-        with:
-          files: |
-            .github/workflows/**
-
   Linux:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
@@ -188,9 +169,7 @@ jobs:
           if-no-files-found: ignore
 
   macOS:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     runs-on: macos-15
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
@@ -254,9 +233,7 @@ jobs:
                 -L flaky --repeat until-pass:3
 
   Windows:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     runs-on: windows-2022
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
@@ -322,9 +299,7 @@ jobs:
         shell: cmd
 
   Wasm:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     strategy:
       matrix:
         target: [Wasm, Wasm64]
