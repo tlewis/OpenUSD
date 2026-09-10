@@ -16,32 +16,13 @@ on:
       - '!.github/workflows/**'
 
 jobs:
-  Validation:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 10
-    outputs:
-      validation-failed: ${{ steps.changed-workflows.outputs.any_changed }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
-        with:
-          ref: ${{ github.ref }}
-      - name: Check workflows directory
-        id: changed-workflows
-        uses: tj-actions/changed-files@9426d40962ed5378910ee2e21d5f8c6fcbf2dd96 #v47.0.6
-        with:
-          files: |
-            .github/workflows/**
-
   Linux:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
     env:
-      PYTHON_VERSION: "3.9.25"
+      PYTHON_VERSION: "3.11.9"
     timeout-minutes: 120
     steps:
       - name: Checkout Code
@@ -65,7 +46,7 @@ jobs:
           sudo apt-get -qq update
           sudo apt-get install -y python3-setuptools libglew-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev
           pip install --upgrade pip
-          pip install PySide2 PyOpenGL
+          pip install PySide6 PyOpenGL
       - name: Build USD
         run: |
           # All tests are run for a push to fully validate the repository; tests requiring a GPU are executed in the
@@ -114,7 +95,7 @@ jobs:
     env:
       # Ensure python is installed in the same location across different runners
       AGENT_TOOLSDIRECTORY: /opt/hostedtoolcache
-      PYTHON_VERSION: "3.9.25"
+      PYTHON_VERSION: "3.11.9"
     timeout-minutes: 30
     steps:
       - name: Install Python
@@ -138,7 +119,7 @@ jobs:
           sudo dpkg -i virtualgl_3.1_amd64.deb
 
           pip install --upgrade pip
-          pip install PySide2 PyOpenGL cmake
+          pip install PySide6 PyOpenGL cmake
       - name: Download USD Build
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 #v4.3.0
         with:
@@ -188,14 +169,12 @@ jobs:
           if-no-files-found: ignore
 
   macOS:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     runs-on: macos-15
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
     env:
-      PYTHON_VERSION: "3.11"
+      PYTHON_VERSION: "3.11.9"
     timeout-minutes: 120
     steps:
       - name: Checkout code
@@ -254,14 +233,12 @@ jobs:
                 -L flaky --repeat until-pass:3
 
   Windows:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     runs-on: windows-2022
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
     env:
-      PYTHON_VERSION: "3.9"
+      PYTHON_VERSION: "3.11.9"
       PYTHONIOENCODING: "utf-8"
       PYTHONUNBUFFERED: "1"
       CCACHE_DEPEND: "1"
@@ -290,7 +267,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install PyOpenGL PySide2
+          python -m pip install PyOpenGL PySide6
       - name: Build USD
         run: |
           :: Not using '--tests' to avoid building extra dependencies that are unneeded for headless tests
@@ -322,9 +299,7 @@ jobs:
         shell: cmd
 
   Wasm:
-    needs:
-      - Validation
-    if: ${{ (github.event_name == 'pull_request' && needs.Validation.outputs.validation-failed != 'true') || github.event_name == 'push' }}
+    if: ${{ (github.event_name == 'pull_request') || github.event_name == 'push' }}
     strategy:
       matrix:
         target: [Wasm, Wasm64]
