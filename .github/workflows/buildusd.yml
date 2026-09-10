@@ -22,7 +22,7 @@ jobs:
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
     env:
-      PYTHON_VERSION: "3.11.11"
+      PYTHON_VERSION: "3.11.9"
     timeout-minutes: 120
     steps:
       - name: Checkout Code
@@ -95,7 +95,7 @@ jobs:
     env:
       # Ensure python is installed in the same location across different runners
       AGENT_TOOLSDIRECTORY: /opt/hostedtoolcache
-      PYTHON_VERSION: "3.11.11"
+      PYTHON_VERSION: "3.11.9"
     timeout-minutes: 30
     steps:
       - name: Install Python
@@ -174,7 +174,7 @@ jobs:
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
     env:
-      PYTHON_VERSION: "3.11"
+      PYTHON_VERSION: "3.11.9"
     timeout-minutes: 120
     steps:
       - name: Checkout code
@@ -238,7 +238,7 @@ jobs:
     permissions:
       contents: write # Grant write permissions in order to upload artifacts
     env:
-      PYTHON_VERSION: "3.11.11"
+      PYTHON_VERSION: "3.11.9"
       PYTHONIOENCODING: "utf-8"
       PYTHONUNBUFFERED: "1"
       CCACHE_DEPEND: "1"
